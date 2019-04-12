@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include "pinguim.h"
 
 class GameWindow;
 
@@ -17,8 +18,8 @@ private:
     sf::RenderWindow window;
     std::unique_ptr<Page> currentPage = nullptr;
 public:
-    GameWindow();
+    GameWindow(std::unique_ptr<Page>&&);
     void dispose();
     void mainLoop();
-    void loadPage(std::unique_ptr<Page>&& page);
+    void loadPage(std::unique_ptr<Page>&&);
 };

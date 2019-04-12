@@ -1,6 +1,7 @@
 #include "engine.h"
 
-GameWindow::GameWindow()
+GameWindow::GameWindow(std::unique_ptr<Page>&& startPage) :
+    currentPage{std::move(startPage)}
 {
     window.create(sf::VideoMode(640, 480), "Raulcastre");
 
@@ -30,6 +31,8 @@ void GameWindow::mainLoop()
                 currentPage->onKeyPressed(event.key.code);
             }
         }
+
+        window.clear(sf::Color::Black);
 
         currentPage->update(*this);
 

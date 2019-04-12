@@ -5,6 +5,7 @@ project(pinguim)
 add_library(pinguim 
     STATIC
         engine.cpp
+        pinguim.cpp
 )
 
 target_link_libraries(pinguim 
