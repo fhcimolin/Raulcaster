@@ -1,12 +1,17 @@
 #include <SFML/Graphics.hpp>
 #include "engine.h"
 
-class Game: public Page
+class Map: public Page
 {
 private:
     sf::Texture tileset;
+
+    float scale;
 public:
-    Game();
+    Map();
+
+    void setScale(float factor);
+
     void update(GameWindow&) override;
     void draw(sf::RenderWindow&) override;
 };

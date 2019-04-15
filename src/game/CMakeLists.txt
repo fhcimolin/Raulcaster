@@ -5,6 +5,8 @@ project(game)
 add_library(game 
     STATIC
         game.cpp
+        mapReader.cpp
+        map.cpp
 )
 
 target_link_libraries(game 

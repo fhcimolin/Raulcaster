@@ -30,6 +30,11 @@ void GameWindow::mainLoop()
             {
                 currentPage->onKeyPressed(event.key.code);
             }
+
+            if(event.type == sf::Event::KeyReleased)
+            {
+                currentPage->onKeyReleased(event.key.code);
+            }
         }
 
         window.clear(sf::Color::Black);
