@@ -1,17 +1,20 @@
 #include "game.h"
 
-Game::Game()
+Game::Game() :
+    tileset{TextureLoader::GetTexture("knd.png")}
 {
-    TextureLoader textureLoader;
-    
-    tileset = textureLoader.GetTexture("knd.png");
 }
 
 void Game::update(GameWindow& game)
 {
-    if(keys[sf::Keyboard::K])
+    if(keys[sf::Keyboard::Escape])
     {
         game.dispose();
+    }
+
+    if(keys[sf::Keyboard::M])
+    {
+        game.loadPage(std::make_unique<Map>());
     }
 }
 

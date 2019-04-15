@@ -26,6 +26,7 @@ class GameWindow
 private:
     sf::RenderWindow window;
     std::unique_ptr<Page> currentPage = nullptr;
+    
     void mainLoop();
 public:
     GameWindow(std::unique_ptr<Page>&&);

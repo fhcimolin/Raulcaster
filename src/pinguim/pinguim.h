@@ -1,7 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
-constexpr auto TILE_SIZE = 64;
+struct Point
+{
+    int x, y;
+};
 
 class TextureLoader
 {
@@ -10,4 +13,6 @@ public:
     static sf::Texture GetTexture(std::string name);
     
     static sf::Sprite GetTileFromTexture(sf::Sprite sprite, int position);
+
+    static constexpr auto TILE_SIZE = 64;
 };
