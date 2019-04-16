@@ -27,9 +27,9 @@ namespace pi
     Text::Text(std::string inputText, sf::Color color, int size) :
         font{}, 
         text{},
-        clock{},
         currentChar{0},
-        textContent{inputText}
+        textContent{inputText},
+        framesSinceTrigger{0}
     {
         if (!font.loadFromFile("../../res/font/arial.ttf"))
         {
@@ -60,23 +60,20 @@ namespace pi
     /**
      * Gets text gradually, character by character. Be careful not to create a pi::Text on the draw method.
      * 
-     * @param[in] speed the speed in which each letter will appear. It's a second divided by the speed for each.
+     * @param[in] frameDelay the speed in which each letter will appear. It's letter a frame, should speed == 1.
+     * @param[in] step how many characters are gonna be printed in each iteration
      */
-    sf::Text Text::getTextSpelled(size_t speed)
+    sf::Text Text::getTextSpelled(size_t frameDelay)
     {
-        sf::Time timeElapsedSinceTrigger = clock.getElapsedTime();
-
-        if(timeElapsedSinceTrigger.asSeconds() > 1.0f / speed)
+        if(++framesSinceTrigger > frameDelay)
         {
-            clock.restart();
+            framesSinceTrigger = 0;
             
             if(currentChar < textContent.length())
             {
                 currentChar++;
 
                 text.setString(textContent.substr(0, currentChar));
-
-                return text;
             }
         }
 

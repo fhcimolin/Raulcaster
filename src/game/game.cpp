@@ -31,7 +31,7 @@ void Game::draw(sf::RenderWindow& window)
     textNormal.setPosition(0.0f, 14.0f);
     textFast.setPosition(0.0f, 28.0f);
 
-    window.draw(textSlow.getTextSpelled(6));
-    window.draw(textNormal.getTextSpelled(12));
-    window.draw(textFast.getTextSpelled(30));    
+    window.draw(textSlow.getTextSpelled(3));
+    window.draw(textNormal.getTextSpelled(2));
+    window.draw(textFast.getTextSpelled(1));
 }

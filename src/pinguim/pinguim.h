@@ -22,10 +22,9 @@ namespace pi
     {
     private:
         int currentChar;
+        int framesSinceTrigger;
 
         std::string textContent;
-
-        sf::Clock clock;
 
         sf::Text text;
 
@@ -36,6 +35,6 @@ namespace pi
         void setPosition(float x, float y);
 
         sf::Text getText();
-        sf::Text getTextSpelled(size_t speed);
+        sf::Text getTextSpelled(size_t frameDelay);
     };
 }
