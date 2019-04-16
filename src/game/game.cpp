@@ -1,7 +1,10 @@
 #include "game.h"
 
 Game::Game() :
-    tileset{TextureLoader::GetTexture("knd.png")}
+    tileset{TextureLoader::GetTexture("knd.png")},
+    textSlow{"Let's give this one a shot, shall we? Also. press 'M' to go to the map!", sf::Color::White, 12},
+    textNormal{"Let's give this one a shot, shall we?", sf::Color::White, 12},
+    textFast{"Let's give this one a shot, shall we?", sf::Color::White, 12}
 {
 }
 
@@ -24,12 +27,11 @@ void Game::draw(sf::RenderWindow& window)
 
     sprite.setTexture(tileset);
 
-    //Here we go.....
+    textSlow.setPosition(0.0f, 0.0f);
+    textNormal.setPosition(0.0f, 14.0f);
+    textFast.setPosition(0.0f, 28.0f);
 
-    int maluco = GameWindow::SCREEN_WIDTH;
-    // SCREEN_HEIGHT
-
-    //
-
-    window.draw(sprite);
+    window.draw(textSlow.getTextSpelled(6));
+    window.draw(textNormal.getTextSpelled(12));
+    window.draw(textFast.getTextSpelled(30));    
 }

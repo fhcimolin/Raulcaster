@@ -7,6 +7,10 @@ class Game: public Page
 {
 private:
     sf::Texture tileset;
+
+    pi::Text textSlow;
+    pi::Text textNormal;
+    pi::Text textFast;
 public:
     Game();
     void update(GameWindow&) override;

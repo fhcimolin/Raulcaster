@@ -3,13 +3,18 @@
 Map::Map() :
     mapReader{ std::make_unique<MapReader>() },
     tileset{ TextureLoader::GetTexture("knd.png") },
-    currentPosition{ 768, 768 },
+    currentPosition{ -64, -144 },
     scale{ 0.5f }
 {
 }
 
 void Map::update(GameWindow& game)
 {
+    if(keys[sf::Keyboard::Escape])
+    {
+        game.dispose();
+    }
+
     if(keys[sf::Keyboard::Q])
     {
         scale -= 0.001f;
