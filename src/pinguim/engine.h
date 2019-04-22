@@ -11,12 +11,8 @@ private:
 protected:
     std::map<sf::Keyboard::Key, bool> keys;
 public:
-    void onKeyPressed(sf::Keyboard::Key key) {
-        keys[key] = true;
-    }
-    void onKeyReleased(sf::Keyboard::Key key) {
-        keys[key] = false;
-    }
+    virtual void onKeyPressed(sf::Keyboard::Key) = 0;
+    virtual void onKeyReleased(sf::Keyboard::Key) = 0;
     virtual void update(GameWindow&) = 0;
     virtual void draw(sf::RenderWindow&) = 0;
 };

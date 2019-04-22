@@ -15,46 +15,37 @@ void GameWindow::loadPage(std::unique_ptr<Page>&& page)
 
 void GameWindow::mainLoop()
 {
-    sf::Clock clockFrameRate;
-    sf::Time timeElapsed;
+    window.setFramerateLimit(30);
 
     while (window.isOpen())
     {
-        timeElapsed = clockFrameRate.getElapsedTime();
-
-        //Limits framerate to ~30 fps
-        if(timeElapsed.asMilliseconds() > 30.f)
+        sf::Event event;
+    
+        while (window.pollEvent(event))
         {
-            sf::Event event;
-        
-            while (window.pollEvent(event))
+            if (event.type == sf::Event::Closed)
             {
-                if (event.type == sf::Event::Closed)
-                {
-                    window.close();
-                }
-
-                if(event.type == sf::Event::KeyPressed)
-                {
-                    currentPage->onKeyPressed(event.key.code);
-                }
-
-                if(event.type == sf::Event::KeyReleased)
-                {
-                    currentPage->onKeyReleased(event.key.code);
-                }
+                window.close();
             }
 
-            window.clear(sf::Color::Black);
+            if(event.type == sf::Event::KeyPressed)
+            {
+                currentPage->onKeyPressed(event.key.code);
+            }
 
-            currentPage->update(*this);
-
-            currentPage->draw(window);
-
-            window.display();
-
-            clockFrameRate.restart();
+            if(event.type == sf::Event::KeyReleased)
+            {
+                currentPage->onKeyReleased(event.key.code);
+            }
         }
+
+        window.clear(sf::Color::Black);
+
+        currentPage->update(*this);
+
+        currentPage->draw(window);
+
+        window.display();
     }
 }
 

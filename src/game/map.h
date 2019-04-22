@@ -17,6 +17,12 @@ public:
 
     void drawMap(sf::RenderWindow&);
 
+    void onKeyPressed(sf::Keyboard::Key key) override {
+        keys[key] = true;
+    }
+    void onKeyReleased(sf::Keyboard::Key key) override {
+        keys[key] = false;
+    }
     void update(GameWindow&) override;
     void draw(sf::RenderWindow&) override;
 };

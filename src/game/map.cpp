@@ -2,7 +2,7 @@
 
 Map::Map() :
     mapReader{ std::make_unique<MapReader>() },
-    tileset{ TextureLoader::GetTexture("knd.png") },
+    tileset{ TextureLoader::getTexture("knd.png") },
     currentPosition{ -64, -144 },
     scale{ 0.5f }
 {
@@ -60,7 +60,7 @@ void Map::drawMap(sf::RenderWindow& window)
         for(auto mapX = 0; mapX < mapReader->GetMapWidth(); mapX++)
         {
             sprite.setTexture(tileset);
-            sprite = TextureLoader::GetTileFromTexture(sprite, mapReader->worldMap[mapX][mapY]);
+            sprite = TextureLoader::getTileFromTexture(sprite, mapReader->worldMap[mapX][mapY]);
 
             // Apply zoom
             sprite.setScale(scale, scale);
