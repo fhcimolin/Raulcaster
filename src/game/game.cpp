@@ -1,4 +1,5 @@
 #include "game.h"
+#include "player.h"
 
 Game::Game() :
     tileset{TextureLoader::getTexture("knd.png")},
@@ -14,6 +15,8 @@ Game::Game() :
     textPusher.sendText("quem com ferro fere com ferro etc");
 
     textPusher.setOrigin(100, 100);
+
+    std::unique_ptr<Player> player = std::make_unique<Player>();
 }
 
 void Game::onKeyPressed(sf::Keyboard::Key key) 
@@ -64,4 +67,6 @@ void Game::draw(sf::RenderWindow& window)
     {
         window.draw(text->getTextSpelled(1));
     }
+
+    
 }

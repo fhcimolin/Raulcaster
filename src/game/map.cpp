@@ -17,32 +17,32 @@ void Map::update(GameWindow& game)
 
     if(keys[sf::Keyboard::Q])
     {
-        scale -= 0.001f;
+        scale -= 0.01f;
     }
 
     if(keys[sf::Keyboard::W])
     {
-        scale += 0.001f;
+        scale += 0.01f;
     }
 
     if(keys[sf::Keyboard::Up])
     {
-        currentPosition.y--;
+        currentPosition.y-= 3;
     }
 
     if(keys[sf::Keyboard::Down])
     {
-        currentPosition.y++;
+        currentPosition.y+= 3;
     }
 
     if(keys[sf::Keyboard::Left])
     {
-        currentPosition.x--;
+        currentPosition.x-= 3;
     }
 
     if(keys[sf::Keyboard::Right])
     {
-        currentPosition.x++;
+        currentPosition.x+= 3;
     }
 }
 

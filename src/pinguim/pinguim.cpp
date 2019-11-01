@@ -200,4 +200,18 @@ namespace pi
     {
         return textShown;
     }
+
+    /***
+     *  Class Texture
+     * 
+     */
+    Texture::Texture()
+    {
+        textureMap["terrain"] = TextureLoader::getTexture("knd.png");
+    }
+
+    sf::Texture Texture::getTexture(std::string name)
+    {
+        return textureMap[name];
+    }
 }

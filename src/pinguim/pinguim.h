@@ -54,6 +54,11 @@ namespace pi
         std::vector<pi::Text*> textShown;
 
         Point origin;
+        
+        void pushAllTexts();
+        void enforceLineLimit();
+        void clearAfterTimeLimit();
+        void clear();
     public:
         TextPusher();
         ~TextPusher();
@@ -61,11 +66,17 @@ namespace pi
         void setOrigin(float x, float y);
         void sendText(std::string inputText);
         void update();
-        void pushAllTexts();
-        void enforceLineLimit();
-        void clearAfterTimeLimit();
-        void clear();
 
         std::vector<pi::Text*> getTexts();
+    };
+
+    class Texture
+    {
+        private:
+            std::map<std::string, sf::Texture> textureMap;
+        public:
+            Texture();
+
+            sf::Texture getTexture(std::string);
     };
 }

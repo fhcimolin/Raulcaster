@@ -16,6 +16,7 @@ void GameWindow::loadPage(std::unique_ptr<Page>&& page)
 void GameWindow::mainLoop()
 {
     window.setFramerateLimit(30);
+    window.setKeyRepeatEnabled(false);
 
     while (window.isOpen())
     {
