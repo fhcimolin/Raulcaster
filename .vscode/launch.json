@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/build/app/app.exe",
             "args": ["-g"],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/build/app",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",

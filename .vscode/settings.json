@@ -3,5 +3,6 @@
     "files.associations": {
         "*.tcc": "cpp"
     },
-    "C_Cpp.errorSquiggles": "Disabled"
+    "C_Cpp.errorSquiggles": "Disabled",
+    "cmake.sourceDirectory": "${workspaceRoot}\\src"
 }
