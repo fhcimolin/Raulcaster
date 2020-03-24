@@ -7,15 +7,20 @@ struct Point
     float x, y;
 };
 
-class TextureLoader
+namespace tex
 {
-public:
-    static constexpr auto TILE_SIZE = 64;
+    class TextureLoader
+    {
+    public:
+        static constexpr auto TILE_SIZE = 64;
 
-    static sf::Texture getTexture(std::string name);
-    
-    static sf::Sprite getTileFromTexture(sf::Sprite sprite, int position);
-};
+        static sf::Texture getTexture(std::string name);
+        
+        static sf::Sprite getTileFromTexture(sf::Sprite sprite, int position);
+
+        static sf::Sprite getTileFromTextureMatrix(sf::Sprite sprite, int positionX, int positionY);
+    };
+}
 
 namespace pi
 {

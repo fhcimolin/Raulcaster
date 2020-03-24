@@ -1,12 +1,9 @@
 #include "game.h"
-#include "player.h"
 
 Game::Game() :
-    tileset{TextureLoader::getTexture("knd.png")},
-    textSlow{"Let's give this one a shot, shall we? Also. press 'M' to go to the map!", sf::Color::White, 12},
-    // textNormal{"Let's give this one a shot, shall we?", sf::Color::White, 12},
-    // textFast{"Let's give this one a shot, shall we?", sf::Color::White, 12}
-    textPusher{}
+    textures{},
+    textPusher{},
+    active{Player()}
 {
     textPusher.sendText("lorem ipsum dolor sit amet");
     textPusher.sendText("adipiscing elit consectetur");
@@ -17,6 +14,10 @@ Game::Game() :
     textPusher.setOrigin(100, 100);
 
     std::unique_ptr<Player> player = std::make_unique<Player>();
+
+    textures.push_back(tex::TextureLoader::getTexture("char.png"));
+
+    active.setTexture(&textures[0]);
 }
 
 void Game::onKeyPressed(sf::Keyboard::Key key) 
@@ -47,6 +48,17 @@ void Game::update(GameWindow& game)
     }
 
     textPusher.update();
+    
+    if(keys[sf::Keyboard::Z])
+    {
+        active.run();
+    }
+    else
+    {
+        active.stop();
+    }
+
+    active.update();
 }
 
 void Game::draw(sf::RenderWindow& window)
@@ -68,5 +80,5 @@ void Game::draw(sf::RenderWindow& window)
         window.draw(text->getTextSpelled(1));
     }
 
-    
+    window.draw(active.getSprite());
 }

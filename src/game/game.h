@@ -1,18 +1,17 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include "player.h"
 #include "engine.h"
-
 #include "map.h"
 
 class Game: public Page
 {
 private:
-    sf::Texture tileset;
-
-    pi::Text textSlow;
-    // pi::Text textNormal;
-    // pi::Text textFast;
+    std::vector<sf::Texture> textures;
 
     pi::TextPusher textPusher;
+
+    Player active;
 public:
     Game();
 

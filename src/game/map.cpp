@@ -2,7 +2,7 @@
 
 Map::Map() :
     mapReader{ std::make_unique<MapReader>() },
-    tileset{ TextureLoader::getTexture("knd.png") },
+    tileset{ tex::TextureLoader::getTexture("knd.png") },
     currentPosition{ -64, -144 },
     scale{ 0.5f }
 {
@@ -60,21 +60,21 @@ void Map::drawMap(sf::RenderWindow& window)
         for(auto mapX = 0; mapX < mapReader->GetMapWidth(); mapX++)
         {
             sprite.setTexture(tileset);
-            sprite = TextureLoader::getTileFromTexture(sprite, mapReader->worldMap[mapX][mapY]);
+            sprite = tex::TextureLoader::getTileFromTexture(sprite, mapReader->worldMap[mapX][mapY]);
 
             // Apply zoom
             sprite.setScale(scale, scale);
 
             // Adjust space inbetween blocks
             sprite.setPosition(
-                mapX * TextureLoader::TILE_SIZE * scale, 
-                mapY * TextureLoader::TILE_SIZE * scale
+                mapX * tex::TextureLoader::TILE_SIZE * scale, 
+                mapY * tex::TextureLoader::TILE_SIZE * scale
             );
 
             // Place zoom on current position
             sprite.move(
-                (window.getSize().x / 2) - (TextureLoader::TILE_SIZE * mapReader->GetMapWidth() * scale / 2) + currentPosition.x,
-                (window.getSize().y / 2) - (TextureLoader::TILE_SIZE * mapReader->GetMapHeight() * scale / 2) + currentPosition.y
+                (window.getSize().x / 2) - (tex::TextureLoader::TILE_SIZE * mapReader->GetMapWidth() * scale / 2) + currentPosition.x,
+                (window.getSize().y / 2) - (tex::TextureLoader::TILE_SIZE * mapReader->GetMapHeight() * scale / 2) + currentPosition.y
             );
             
             window.draw(sprite);

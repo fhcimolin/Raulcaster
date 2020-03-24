@@ -1,25 +1,38 @@
 #include "pinguim.h"
 
-sf::Texture TextureLoader::getTexture(std::string name)
+namespace tex
 {
-    sf::Texture texture;
-
-    if (!texture.loadFromFile("../../res/" + name))
+    sf::Texture TextureLoader::getTexture(std::string name)
     {
-        texture.update(new sf::Uint8[TILE_SIZE * TILE_SIZE * 4]);
+        sf::Texture texture;
+
+        if (!texture.loadFromFile("../../res/" + name))
+        {
+            texture.update(new sf::Uint8[TILE_SIZE * TILE_SIZE * 4]);
+        }
+
+        return texture;
     }
 
-    return texture;
-}
+    sf::Sprite TextureLoader::getTileFromTexture(sf::Sprite sprite, int position)
+    {
+        sprite.setTextureRect(sf::IntRect(
+            TILE_SIZE * (position % 10), 
+            TILE_SIZE * std::floor(position / 10), 
+            TILE_SIZE, TILE_SIZE));
 
-sf::Sprite TextureLoader::getTileFromTexture(sf::Sprite sprite, int position)
-{
-    sprite.setTextureRect(sf::IntRect(
-        TILE_SIZE * (position % 10), 
-        TILE_SIZE * std::floor(position / 10), 
-        TILE_SIZE, TILE_SIZE));
+        return sprite;
+    }
 
-    return sprite;
+    sf::Sprite TextureLoader::getTileFromTextureMatrix(sf::Sprite sprite, int row, int cell)
+    {
+        sprite.setTextureRect(sf::IntRect(
+            TILE_SIZE * cell, 
+            TILE_SIZE * row, 
+            TILE_SIZE, TILE_SIZE));
+
+        return sprite;
+    }
 }
 
 namespace pi
@@ -207,7 +220,7 @@ namespace pi
      */
     Texture::Texture()
     {
-        textureMap["terrain"] = TextureLoader::getTexture("knd.png");
+        textureMap["terrain"] = tex::TextureLoader::getTexture("knd.png");
     }
 
     sf::Texture Texture::getTexture(std::string name)

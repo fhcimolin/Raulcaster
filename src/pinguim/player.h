@@ -1,11 +1,16 @@
 #include "active.h"
 
-class Player //: public pi::Active
+class Player : public pi::Active
 {
+private:
+    void initializeAnimationReel() override;
+
+    int speed;
 public:
     Player();
 
-    //sf::Sprite getSprite() override;
+    void readKey();
 
-    //void update() override;
+    void stop();
+    void run();
 };

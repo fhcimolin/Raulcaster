@@ -4,22 +4,37 @@
 
 namespace pi
 {
+    struct animation
+    {
+        int reelLenght;
+        int speed;
+    };
+
     class Active
     {
+    private:
+        void updateTextureCell();
+        
+        virtual void initializeAnimationReel() = 0;
     protected:
+        int currentReel;
+        int currentFrameDelay;
         int currentFrame;
         int maxFrame;
         
         bool repeat;
 
-        std::unique_ptr<sf::Sprite> sprite;
+        sf::Sprite sprite;
+
+        std::vector<animation> animationReel;
     public:
         Active();
-        
-        virtual void update() = 0;
 
-        virtual std::unique_ptr<sf::Sprite> getSprite() = 0;
+        void changeReel(int);
+        void setPosition(int, int);
+        void setTexture(sf::Texture*);
+        void update();
+
+        sf::Sprite getSprite();
     };
-
-    //Leitura: https://stackoverflow.com/a/42734905/9555272
 }
