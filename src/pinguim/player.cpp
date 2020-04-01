@@ -1,11 +1,9 @@
 #include "player.h"
 
 Player::Player() :
-    speed{11}
+    speed{4}
 {
     initializeAnimationReel();
-
-    stop();
 }
 
 void Player::initializeAnimationReel()
@@ -14,7 +12,7 @@ void Player::initializeAnimationReel()
     {
         pi::animation
         {1,0},
-        {3,speed}
+        {3,speed/2}
     }); 
 }
 
@@ -25,10 +23,22 @@ void Player::readKey()
 
 void Player::stop()
 {
-    changeReel(0);
+    changeAnimationReel(0);
 }
 
 void Player::run()
 {
-    changeReel(1);
+    changeAnimationReel(1);
+}
+
+void Player::move(v::direction direction)
+{
+    if(direction == v::direction::left)
+    {
+        setPosition(x - speed, y);
+    }
+    else if(direction == v::direction::right)
+    {
+        setPosition(x + speed, y);
+    }
 }

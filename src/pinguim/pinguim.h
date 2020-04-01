@@ -2,9 +2,33 @@
 #include <iostream>
 #include <cmath>
 
-struct Point
-{
-    float x, y;
+constexpr static auto SCREEN_WIDTH = 640;
+constexpr static auto SCREEN_HEIGHT = 480;
+constexpr static auto TEX_WIDTH = 64;
+constexpr static auto TEX_HEIGHT = 64;
+
+struct Point {
+    double x, y;
+
+    friend auto operator+(const Point& p1, const Point& p2) {
+        return Point{p1.x + p2.x, p1.y + p2.y};
+    }
+
+    friend auto operator-(const Point& p1, const Point& p2) {
+        return Point{p1.x - p2.x, p1.y - p2.y};
+    }
+
+    auto& operator+=(const Point& other) {
+        *this = *this + other;
+
+        return *this;
+    }
+
+    auto& operator-=(const Point& other) {
+        *this = *this - other;
+
+        return *this;
+    }
 };
 
 namespace tex
@@ -14,11 +38,15 @@ namespace tex
     public:
         static constexpr auto TILE_SIZE = 64;
 
+        static sf::Image getImage(std::string name);
+
         static sf::Texture getTexture(std::string name);
         
         static sf::Sprite getTileFromTexture(sf::Sprite sprite, int position);
 
-        static sf::Sprite getTileFromTextureMatrix(sf::Sprite sprite, int positionX, int positionY);
+        static sf::Sprite getTileFromTextureMatrix(sf::Sprite sprite, int row, int cell);
+
+        static std::vector<unsigned int> getImageAsVectorStripe(sf::Image image);
     };
 }
 

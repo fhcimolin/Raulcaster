@@ -1,4 +1,5 @@
 #include "active.h"
+#include "values.h"
 
 class Player : public pi::Active
 {
@@ -13,4 +14,6 @@ public:
 
     void stop();
     void run();
+
+    void move(v::direction);
 };

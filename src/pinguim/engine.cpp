@@ -3,7 +3,7 @@
 GameWindow::GameWindow(std::unique_ptr<Page>&& startPage) :
     currentPage{std::move(startPage)}
 {
-    window.create(sf::VideoMode(640, 480), "Raulcastre");
+    window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Raulcastre");
 
     mainLoop();
 }

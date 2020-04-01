@@ -13,7 +13,7 @@ namespace pi
         setPosition(300,300);
     }
 
-    void Active::changeReel(int reel)
+    void Active::changeAnimationReel(int reel)
     {
         if(currentReel != reel)
         {
@@ -27,9 +27,12 @@ namespace pi
         maxFrame = animationReel[currentReel].reelLenght;
     }
 
-    void Active::setPosition(int x, int y)
+    void Active::setPosition(int _x, int _y)
     {
-        sprite.setPosition(x, y);
+        x = _x;
+        y = _y;
+
+        sprite.setPosition(_x, _y);
     }
 
     void Active::setTexture(sf::Texture* texture)

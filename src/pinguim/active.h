@@ -16,13 +16,15 @@ namespace pi
         void updateTextureCell();
         
         virtual void initializeAnimationReel() = 0;
-    protected:
-        int currentReel;
+        
         int currentFrameDelay;
         int currentFrame;
         int maxFrame;
+    protected:
+        int currentReel;
         
-        bool repeat;
+        int x;
+        int y;
 
         sf::Sprite sprite;
 
@@ -30,7 +32,7 @@ namespace pi
     public:
         Active();
 
-        void changeReel(int);
+        void changeAnimationReel(int);
         void setPosition(int, int);
         void setTexture(sf::Texture*);
         void update();

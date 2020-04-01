@@ -2,6 +2,18 @@
 
 namespace tex
 {
+    sf::Image TextureLoader::getImage(std::string name)
+    {
+        sf::Image image;
+
+        if (!image.loadFromFile("../../res/" + name))
+        {
+            image.create(TILE_SIZE, TILE_SIZE, sf::Color::Yellow);
+        }
+
+        return image;
+    }
+
     sf::Texture TextureLoader::getTexture(std::string name)
     {
         sf::Texture texture;
@@ -32,6 +44,36 @@ namespace tex
             TILE_SIZE, TILE_SIZE));
 
         return sprite;
+    }
+
+    std::vector<unsigned int> TextureLoader::getImageAsVectorStripe(sf::Image image)
+    {
+        auto _vectorStripe = std::vector<unsigned int>();
+        
+        for(int vertical = 0; vertical < image.getSize().y; vertical++)
+        {
+            for(int horizontal = 0; horizontal < image.getSize().x; horizontal++)
+            {
+                try
+                {
+                    auto pixelColor = image.getPixel(horizontal,vertical);
+                    
+                    auto r = pixelColor.r;
+                    auto g = pixelColor.g;
+                    auto b = pixelColor.b;
+
+                    _vectorStripe.push_back(
+                        (r << 16) + (g << 8) + b
+                        );
+                }
+                catch(const std::exception& e)
+                {
+                    _vectorStripe.push_back(16711680);
+                }
+            }   
+        }    
+
+        return _vectorStripe;    
     }
 }
 

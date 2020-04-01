@@ -28,9 +28,4 @@ public:
     GameWindow(std::unique_ptr<Page>&&);
     void dispose();
     void loadPage(std::unique_ptr<Page>&&);
-
-    constexpr static auto SCREEN_WIDTH = 640;
-    constexpr static auto SCREEN_HEIGHT = 480;
-    constexpr static auto TEX_WIDTH = 64;
-    constexpr static auto TEX_HEIGHT = 64;
 };

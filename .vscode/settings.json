@@ -1,8 +1,10 @@
 {
     "C_Cpp.configurationWarnings": "Disabled",
     "files.associations": {
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "array": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled",
-    "cmake.sourceDirectory": "${workspaceRoot}\\src"
+    "cmake.sourceDirectory": "${workspaceRoot}\\src",
+    "git.ignoreLimitWarning": true
 }
