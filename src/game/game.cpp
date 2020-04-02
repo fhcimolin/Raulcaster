@@ -1,16 +1,39 @@
 #include "game.h"
+#include <cmath>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <sstream>
+#include "utils.h"
 
-void movePlayer(
-    std::map<sf::Keyboard::Key, bool>,
-    double,
-    double,
-    double,
-    double,
-    double,
-    double,
-    double,
-    double,
-    int);
+auto texture = std::array<std::vector<unsigned int>, 12>{};
+
+auto bgWidth = 283, bgHeight = 139;
+auto resizeBg = 3;
+
+auto posX = 22.0, posY = 11.5; // x and y start position
+auto dirX = -1.0, dirY = 0.0; // initial direction vector
+auto planeX = 0.0, planeY = 0.66; // the 2d raycaster version of camera plane
+
+auto offset = bgWidth * resizeBg * 2;
+
+auto moveSpeed = 0.13;
+auto rotSpeed = 0.13;
+
+int w = SCREEN_WIDTH;
+int h = SCREEN_HEIGHT;
+
+enum class Motion
+{
+    FORWARD = 1, BACKWARD
+};
+
+enum class Direction
+{
+    RIGHT = 1, LEFT
+};
+
+void movePlayer(std::map<sf::Keyboard::Key, bool>);
 
 void drawBuffer(sf::RenderWindow&);
 
@@ -59,6 +82,7 @@ void Game::update(GameWindow& game)
     textPusher.update();
     active.update();
 
+    movePlayer(keys);
     meuTenis();
 }
 
@@ -102,16 +126,13 @@ void Game::draw(sf::RenderWindow& window)
     drawBuffer(window);
 }
 
-#include <cmath>
-#include <string>
-#include <vector>
-#include <iostream>
-#include <sstream>
-
-// #include "quickcg.h"
-#include "utils.h"
-
-// using namespace QuickCG;
+/**
+ * 
+ * 
+ *      MAP STUFF. GET RID OF IT 
+ * 
+ * 
+ */
 
 constexpr auto MAP_WIDTH = 24;
 constexpr auto MAP_HEIGHT = 24;
@@ -235,12 +256,16 @@ auto ceilingMap = Map
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 };
 
-enum class FogType {
+enum class FogType 
+{
     FOG = 1,
     NIGHT,
     HEAT,
     _SIZE, // Just to get enum length. Do not use it.
 };
+
+auto fogIntensity = 3;
+auto currentFog = FogType::FOG;
 
 /**
  * Shifts fog.
@@ -257,9 +282,6 @@ auto& operator++(FogType& fog) {
     return fog;
 }
 
-auto fogIntensity = 3;
-auto currentFog = FogType::FOG;
-
 auto outOfBounds(int mapX, int mapY) {
     return mapX >= MAP_WIDTH or
         mapX < 0 or
@@ -275,51 +297,52 @@ auto collidesWithWallUpstairs(int x, int y, int store) {
     return collidesWithWall(x, y) and bumpMap[x][y] == store;
 }
 
-auto moveForward(double &posX, double &posY, double &dirX, double &dirY, double moveSpeed, bool clip)
+auto move(Motion motion, bool clip)
 {
-    if (not collidesWithWall(int(posX + dirX * moveSpeed), int(posY)) or not clip) {
-        posX += dirX * moveSpeed;
+    auto speed = moveSpeed;
+
+    if(utils::value_of(motion) == utils::value_of(Motion::BACKWARD))
+    {
+        speed = -speed;
     }
 
-    if (not collidesWithWall(int(posX), int(posY + dirY * moveSpeed)) or not clip) {
-        posY += dirY * moveSpeed;
+    if (not collidesWithWall(int(posX + dirX * speed), int(posY)) or not clip) {
+        posX += dirX * speed;
     }
 
-    return Point{posX, posY};
+    if (not collidesWithWall(int(posX), int(posY + dirY * speed)) or not clip) {
+        posY += dirY * speed;
+    }
 }
 
-void rotatePlayer(double &dirX, double &dirY, double &planeX, double &planeY, double rotSpeed, int &offset) {
+void rotatePlayer(Direction direction) {
     auto oldDirX = dirX;
     auto oldPlaneX = planeX;
 
-    dirX = dirX * cos(-rotSpeed) - dirY * sin(-rotSpeed);
-    dirY = oldDirX * sin(-rotSpeed) + dirY * cos(-rotSpeed);
+    auto _rotSpeed = rotSpeed;
 
-    planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
-    planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
+    if(utils::value_of(direction) == utils::value_of(Direction::LEFT))
+    {
+        _rotSpeed = -_rotSpeed;
+    }
 
-    if (rotSpeed > 0) {
+    dirX = dirX * cos(-_rotSpeed) - dirY * sin(-_rotSpeed);
+    dirY = oldDirX * sin(-_rotSpeed) + dirY * cos(-_rotSpeed);
+
+    planeX = planeX * cos(-_rotSpeed) - planeY * sin(-_rotSpeed);
+    planeY = oldPlaneX * sin(-_rotSpeed) + planeY * cos(-_rotSpeed);
+
+    if (_rotSpeed > 0) {
         offset++;
     } else {
         offset--;
     }
 }
 
-void movePlayer(
-        std::map<sf::Keyboard::Key, bool> keys,
-        double &posX,
-        double &posY,
-        double &dirX,
-        double &dirY,
-        double &planeX,
-        double &planeY,
-        double moveSpeed,
-        double rotSpeed,
-        int &offset) {
-    Point playerPosition;
-
+void movePlayer(std::map<sf::Keyboard::Key, bool> keys) 
+{
     if (keys[sf::Keyboard::Up]) {
-        playerPosition = moveForward(posX, posY, dirX, dirY, moveSpeed, true);
+        move(Motion::FORWARD, true);
     }
 
     if (keys[sf::Keyboard::Num0]) {
@@ -337,32 +360,33 @@ void movePlayer(
     }
 
     if (keys[sf::Keyboard::Down]) {
-        playerPosition = moveForward(posX, posY, dirX, dirY, -moveSpeed, true);
+        move(Motion::BACKWARD, true);
     }
 
     auto rotateSpeed = 3;
+
     if (keys[sf::Keyboard::Right]) {
-        for (auto ui = 0; ui < rotateSpeed; ui++) {
-            moveForward(posX, posY, dirX, dirY, +moveSpeed, false);
-        }
+        // for (auto ui = 0; ui < rotateSpeed; ui++) {
+        //     moveForward(false);
+        // }
 
-        rotatePlayer(dirX, dirY, planeX, planeY, rotSpeed, offset);
+        rotatePlayer(Direction::RIGHT);
 
-        for (auto ui = 0; ui < rotateSpeed; ui++) {
-            moveForward(posX, posY, dirX, dirY, -moveSpeed, false);
-        }
+        // for (auto ui = 0; ui < rotateSpeed; ui++) {
+        //     moveForward(false);
+        // }
     }
 
     if (keys[sf::Keyboard::Left]) {
-        for (auto ui = 0; ui < rotateSpeed; ui++) {
-            moveForward(posX, posY, dirX, dirY, +moveSpeed, false);
-        }
+        // for (auto ui = 0; ui < rotateSpeed; ui++) {
+        //     moveForward(false);
+        // }
 
-        rotatePlayer(dirX, dirY, planeX, planeY, -rotSpeed, offset);
+        rotatePlayer(Direction::LEFT);
 
-        for (auto ui = 0; ui < rotateSpeed; ui++) {
-            moveForward(posX, posY, dirX, dirY, -moveSpeed, false);
-        }
+        // for (auto ui = 0; ui < rotateSpeed; ui++) {
+        //     moveForward(false);
+        // }
     }
 }
 
@@ -421,9 +445,6 @@ void combSort(int* order, double* dist, int amount);
 auto getTexturePixel(int x, int y, int resizeBg, int bgWidth, int bgHeight) {
     return int(int(x/resizeBg) + (int(y/resizeBg)*bgWidth))%(bgWidth*bgHeight);
 }
-
-auto resizeBg = 3;
-auto bgWidth = 283, bgHeight = 139;
 
 enum class ColorChannel {
     R = 1 << 16,
@@ -552,18 +573,6 @@ void drawBuffer(sf::RenderWindow& window)
     }
 }
 
-auto posX = 22.0, posY = 11.5; // x and y start position
-auto dirX = -1.0, dirY = 0.0; // initial direction vector
-auto planeX = 0.0, planeY = 0.66; // the 2d raycaster version of camera plane
-
-auto _time = 0; // time of current frame
-auto oldTime = 0; // time of previous frame
-auto texture = std::array<std::vector<unsigned int>, 12>{};
-auto offset = bgWidth * resizeBg * 2;
-
-int w = SCREEN_WIDTH;
-int h = SCREEN_HEIGHT;
-
 void loadTextures()
 {
     auto imageBackground = tex::TextureLoader::getImage("pics\\mossy.png");
@@ -572,8 +581,11 @@ void loadTextures()
     auto imageGravel = tex::TextureLoader::getImage("pics\\purplestone.png");
     auto imageCliff = tex::TextureLoader::getImage("pics\\redbrick.png");
     auto imageTree = tex::TextureLoader::getImage("pics\\pillar.png");
+    auto imageGrassTrail = tex::TextureLoader::getImage("pics\\wood.png");
     
-    texture[5] = tex::TextureLoader::getImageAsVectorStripe(imageBackground);    
+    texture[5] = tex::TextureLoader::getImageAsVectorStripe(imageBackground);
+    texture[6] = tex::TextureLoader::getImageAsVectorStripe(imageGrassTrail);
+    texture[1] = tex::TextureLoader::getImageAsVectorStripe(imageGround);
     texture[0] = tex::TextureLoader::getImageAsVectorStripe(imageGround);
     texture[2] = tex::TextureLoader::getImageAsVectorStripe(imageStone);
     texture[3] = tex::TextureLoader::getImageAsVectorStripe(imageGravel);
@@ -583,23 +595,7 @@ void loadTextures()
 
 void meuTenis() {
     
-    // error |= loadImage(texture[1], tw, th, "pics/redbrick.png");
-    // error |= loadImage(texture[2], tw, th, "pics/purplestone.png");
-    // error |= loadImage(texture[3], tw, th, "pics/greystone.png");
-    // error |= loadImage(texture[4], tw, th, "pics/bluestone.png");
-    // error |= loadImage(texture[5], tw, th, "pics/mossy.png");
-    // error |= loadImage(texture[6], tw, th, "pics/wood.png");
-    // error |= loadImage(texture[7], tw, th, "pics/colorstone.png");
-
-    // // load some sprite textures
-    // error |= loadImage(texture[8], tw, th, "pics/barrel.png");
-    // error |= loadImage(texture[9], tw, th, "pics/pillar.png");
-    // error |= loadImage(texture[10], tw, th, "pics/greenlight.png");
-    // error |= loadImage(texture[11], tw, th, "pics/eagle.png");    
-
-    // while (true) {
-        
-        drawBackground(texture[5], offset);
+    drawBackground(texture[5], offset);
 
         for (auto x = 0; x < w; x++) {
             // calculate ray position and direction
@@ -908,7 +904,7 @@ void meuTenis() {
                 {
                     if (not undrawableSpot[y]) 
                     {
-                        if (bumpMap[mapX][mapY] == 9 or
+                        if ((bumpMap[mapX][mapY] == 9 && timeToDrawThoseSillyFloatingCubes) or
                                 (bumpMap[mapX][mapY] == 1 and worldMap[mapX][mapY] > 0)) 
                         {
                             undrawableSpot[y] = true;
