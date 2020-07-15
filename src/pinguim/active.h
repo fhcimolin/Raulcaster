@@ -38,5 +38,8 @@ namespace pi
         void update();
 
         sf::Sprite getSprite();
+        sf::Image getImage();
+
+        const sf::Texture* getTexture();
     };
 }

@@ -41,6 +41,8 @@ void meuTenis();
 
 void loadTextures();
 
+void updateActiveTextures(pi::Active&);
+
 Game::Game() :
     textures{},
     textPusher{},
@@ -65,6 +67,16 @@ void Game::onKeyReleased(sf::Keyboard::Key key)
     keys[key] = false;
 }
 
+void Game::onKeyPressed(sf::Keyboard::Key key) 
+{
+    if(key == sf::Keyboard::P)
+    {
+        textPusher.sendText("cachorros em bando de 4 cachorros");
+    }
+
+    keys[key] = true;
+}
+
 void Game::update(GameWindow& game)
 {
     if(keys[sf::Keyboard::Escape])
@@ -77,23 +89,14 @@ void Game::update(GameWindow& game)
         // game.loadPage(std::make_unique<Map>());
     }
 
-    handleKeys();
-
     textPusher.update();
     active.update();
 
+    updateActiveTextures(active);
+
+    handleKeys();
     movePlayer(keys);
     meuTenis();
-}
-
-void Game::onKeyPressed(sf::Keyboard::Key key) 
-{
-    if(key == sf::Keyboard::P)
-    {
-        textPusher.sendText("cachorros em bando de 4 cachorros");
-    }
-
-    keys[key] = true;
 }
 
 void Game::handleKeys()
@@ -116,14 +119,49 @@ void Game::handleKeys()
 
 void Game::draw(sf::RenderWindow& window)
 {
+    drawBuffer(window);
+
     for(auto text : textPusher.getTexts())
     {
         window.draw(text->getTextSpelled(1));
     }
 
-    window.draw(active.getSprite());
+    window.draw(active.getSprite()); 
+}
 
-    drawBuffer(window);
+void loadTextures()
+{
+    auto imageBackground = tex::TextureLoader::getImage("pics\\mossy.png");
+    auto imageGrass = tex::TextureLoader::getImage("pics\\greystone.png");
+    auto imageStone = tex::TextureLoader::getImage("pics\\bluestone.png");
+    auto imageGravel = tex::TextureLoader::getImage("pics\\purplestone.png");
+    auto imageCliff = tex::TextureLoader::getImage("pics\\redbrick.png");
+    auto imageTree = tex::TextureLoader::getImage("pics\\pillar.png");
+    auto imageGrassTrail = tex::TextureLoader::getImage("pics\\wood.png");
+    auto imageMossWall = tex::TextureLoader::getImage("pics\\colorstone.png");
+    
+    texture[5] = tex::TextureLoader::getImageAsVectorStripe(imageBackground);
+    texture[3] = tex::TextureLoader::getImageAsVectorStripe(imageGrass);
+    texture[2] = tex::TextureLoader::getImageAsVectorStripe(imageGravel);
+    texture[6] = tex::TextureLoader::getImageAsVectorStripe(imageGrassTrail);
+    
+    texture[4] = tex::TextureLoader::getImageAsVectorStripe(imageStone);
+    
+    texture[1] = tex::TextureLoader::getImageAsVectorStripe(imageStone);
+    texture[0] = tex::TextureLoader::getImageAsVectorStripe(imageStone);
+    
+    texture[9] = tex::TextureLoader::getImageAsVectorStripe(imageTree);
+}
+    
+void updateActiveTextures(pi::Active& active)
+{
+    // auto imageTree = active.getSprite();
+
+    auto imageTree = active.getTexture()->copyToImage();
+
+    
+
+    texture[9] = tex::TextureLoader::getImageAsVectorStripe(imageTree);
 }
 
 /**
@@ -571,26 +609,6 @@ void drawBuffer(sf::RenderWindow& window)
             buffer[y][x] = 0;
         }
     }
-}
-
-void loadTextures()
-{
-    auto imageBackground = tex::TextureLoader::getImage("pics\\mossy.png");
-    auto imageGround = tex::TextureLoader::getImage("pics\\greystone.png");
-    auto imageStone = tex::TextureLoader::getImage("pics\\bluestone.png");
-    auto imageGravel = tex::TextureLoader::getImage("pics\\purplestone.png");
-    auto imageCliff = tex::TextureLoader::getImage("pics\\redbrick.png");
-    auto imageTree = tex::TextureLoader::getImage("pics\\pillar.png");
-    auto imageGrassTrail = tex::TextureLoader::getImage("pics\\wood.png");
-    
-    texture[5] = tex::TextureLoader::getImageAsVectorStripe(imageBackground);
-    texture[6] = tex::TextureLoader::getImageAsVectorStripe(imageGrassTrail);
-    texture[1] = tex::TextureLoader::getImageAsVectorStripe(imageGround);
-    texture[0] = tex::TextureLoader::getImageAsVectorStripe(imageGround);
-    texture[2] = tex::TextureLoader::getImageAsVectorStripe(imageStone);
-    texture[3] = tex::TextureLoader::getImageAsVectorStripe(imageGravel);
-    texture[4] = tex::TextureLoader::getImageAsVectorStripe(imageCliff);
-    texture[9] = tex::TextureLoader::getImageAsVectorStripe(imageTree);
 }
 
 void meuTenis() {

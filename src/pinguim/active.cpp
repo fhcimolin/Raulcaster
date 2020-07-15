@@ -77,4 +77,9 @@ namespace pi
     {
         return sprite;
     }
+
+    const sf::Texture* Active::getTexture()
+    {
+        sprite.getTexture();
+    }
 }

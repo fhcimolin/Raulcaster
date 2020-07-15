@@ -23,6 +23,26 @@ namespace tex
             texture.update(new sf::Uint8[TILE_SIZE * TILE_SIZE * 4]);
         }
 
+        auto image = texture.copyToImage();
+
+        for(int y = 0; y < texture.getSize().y; y++)
+        {
+            for(int x = 0; x < texture.getSize().x; x++)
+            {
+                auto pixel = image.getPixel(x, y);
+
+                //Black is the transparent color
+                if(pixel == sf::Color::Black)
+                {
+                    pixel = sf::Color(0,0,0,0);
+                    
+                    image.setPixel(x, y, pixel);
+                }
+            }
+        }
+
+        texture.update(image);
+
         return texture;
     }
 
