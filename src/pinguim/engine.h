@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "pinguim.h"
+#include <memory>
 
 class GameWindow;
 

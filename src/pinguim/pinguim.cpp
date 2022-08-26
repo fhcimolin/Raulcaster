@@ -18,13 +18,16 @@ namespace tex
     {
         sf::Texture texture;
 
+        // If unable to load file
         if (!texture.loadFromFile("../../res/" + name))
         {
+            // Create default clean texture
             texture.update(new sf::Uint8[TILE_SIZE * TILE_SIZE * 4]);
         }
 
         auto image = texture.copyToImage();
 
+        // Eliminate transparent pixels from texture
         for(int y = 0; y < texture.getSize().y; y++)
         {
             for(int x = 0; x < texture.getSize().x; x++)

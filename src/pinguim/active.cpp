@@ -80,6 +80,6 @@ namespace pi
 
     const sf::Texture* Active::getTexture()
     {
-        sprite.getTexture();
+        return sprite.getTexture();
     }
 }

@@ -11,8 +11,8 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "C:\\\\\\\\MinGW\\\\\\\\bin\\\\\\\\gcc.exe",
-            "cStandard": "c11",
+            "compilerPath": "C:\\msys64\\mingw32\\bin\\g++.exe",
+            "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "clang-x64",
             "configurationProvider": "vector-of-bool.cmake-tools"

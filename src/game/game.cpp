@@ -2,6 +2,8 @@
 #include <cmath>
 #include <string>
 #include <vector>
+#include <array>
+#include <map>
 #include <iostream>
 #include <sstream>
 #include "utils.h"
