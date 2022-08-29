@@ -45,23 +45,23 @@ void loadTextures();
 
 void updateActiveTextures(pi::Active&);
 
-Game::Game() :
-    textures{},
-    textPusher{},
-    active{Player()}
+Game::Game() 
+    // textures{},
+    // textPusher{},
+    // active{Player()}
 {
-    textPusher.sendText("lorem ipsum dolor sit amet");
-    textPusher.sendText("adipiscing elit consectetur");
-    textPusher.sendText("socorram me subi no");
-    textPusher.sendText("onibus em marrocos");
-    textPusher.sendText("quem com ferro fere com ferro etc");
-    textPusher.setOrigin(100, 100);
+    // textPusher.sendText("lorem ipsum dolor sit amet");
+    // textPusher.sendText("adipiscing elit consectetur");
+    // textPusher.sendText("socorram me subi no");
+    // textPusher.sendText("onibus em marrocos");
+    // textPusher.sendText("quem com ferro fere com ferro etc");
+    // textPusher.setOrigin(100, 100);
 
-    textures.push_back(tex::TextureLoader::getTexture("char.png"));
+    // textures.push_back(tex::TextureLoader::getTexture("char.png"));
 
-    active.setTexture(&textures[0]);
+    // active.setTexture(&textures[0]);
 
-    loadTextures();
+    // loadTextures();
 }
 
 void Game::onKeyReleased(sf::Keyboard::Key key) 
@@ -91,14 +91,14 @@ void Game::update(GameWindow& game)
         // game.loadPage(std::make_unique<Map>());
     }
 
-    textPusher.update();
-    active.update();
+    // textPusher.update();
+    // active.update();
 
-    updateActiveTextures(active);
+    // updateActiveTextures(active);
 
-    handleKeys();
-    movePlayer(keys);
-    meuTenis();
+    // handleKeys();
+    // movePlayer(keys);
+    // meuTenis();
 }
 
 void Game::handleKeys()

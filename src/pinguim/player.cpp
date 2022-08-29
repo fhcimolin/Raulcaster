@@ -8,12 +8,12 @@ Player::Player() :
 
 void Player::initializeAnimationReel()
 {
-    animationReel = std::vector<pi::animation>(
-    {
-        pi::animation
-        {1,0},
-        {3,speed/2}
-    }); 
+    // animationReel = std::vector<pi::animation>(
+    // {
+    //     pi::animation
+    //     {1,0},
+    //     {3,speed/2}
+    // }); 
 }
 
 void Player::readKey()
