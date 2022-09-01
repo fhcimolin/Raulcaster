@@ -123,7 +123,7 @@ void Game::draw(sf::RenderWindow& window)
 {
     drawBuffer(window);
 
-    for(auto text : textPusher.getTexts())
+    for(auto&& text : textPusher.getTexts())
     {
         window.draw(text->getTextSpelled(1));
     }
@@ -142,15 +142,13 @@ void loadTextures()
     auto imageGrassTrail = tex::TextureLoader::getImage("pics\\wood.png");
     auto imageMossWall = tex::TextureLoader::getImage("pics\\colorstone.png");
     
-    texture[5] = tex::TextureLoader::getImageAsVectorStripe(imageBackground);
-    texture[3] = tex::TextureLoader::getImageAsVectorStripe(imageGrass);
-    texture[2] = tex::TextureLoader::getImageAsVectorStripe(imageGravel);
-    texture[6] = tex::TextureLoader::getImageAsVectorStripe(imageGrassTrail);
-    
-    texture[4] = tex::TextureLoader::getImageAsVectorStripe(imageStone);
-    
-    texture[1] = tex::TextureLoader::getImageAsVectorStripe(imageStone);
     texture[0] = tex::TextureLoader::getImageAsVectorStripe(imageStone);
+    texture[1] = tex::TextureLoader::getImageAsVectorStripe(imageStone);
+    texture[2] = tex::TextureLoader::getImageAsVectorStripe(imageGravel);
+    texture[3] = tex::TextureLoader::getImageAsVectorStripe(imageGrass);
+    texture[4] = tex::TextureLoader::getImageAsVectorStripe(imageStone);
+    texture[5] = tex::TextureLoader::getImageAsVectorStripe(imageBackground);
+    texture[6] = tex::TextureLoader::getImageAsVectorStripe(imageGrassTrail);
     
     texture[9] = tex::TextureLoader::getImageAsVectorStripe(imageTree);
 }
@@ -579,7 +577,8 @@ void drawBuffer(sf::RenderWindow& window)
 
     sf::Image imageBuffer;
     sf::Texture imageTexture;
-    sf::Uint8* pixels = new sf::Uint8[SCREEN_WIDTH * SCREEN_HEIGHT * 4];
+
+    auto pixels = std::array<sf::Uint8, SCREEN_WIDTH * SCREEN_HEIGHT * 4>{};
 
     imageTexture.create(SCREEN_WIDTH, SCREEN_HEIGHT);
     
@@ -600,11 +599,9 @@ void drawBuffer(sf::RenderWindow& window)
         }
     }
 
-    imageTexture.update(pixels);
+    imageTexture.update(pixels.data());
     
     window.draw(imageSprite);
-
-    delete(pixels);
 
     for (auto y = 0; y < SCREEN_HEIGHT; y++) 
     {
@@ -1024,7 +1021,7 @@ void meuTenis() {
                         floorTexture = floorMap[(int)currentFloorX][(int)currentFloorY];
 
                         floorColor = texture[floorTexture][TEX_WIDTH * floorTexY + floorTexX] >> 1 & 8355711;
-
+//1076428800 this caused a segfault, maybe couldn't read floormap and floorTexture got garbage instead
                         // first thing: draw floor just underneath first
                         // store's drawEnd
                         if (store == 0) 

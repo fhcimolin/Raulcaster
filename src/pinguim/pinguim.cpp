@@ -205,9 +205,9 @@ namespace pi
 
     void TextPusher::sendText(std::string inputText)
     {
-        pi::Text* text = new pi::Text(inputText, sf::Color::White, 12);
+        auto text = std::make_unique<pi::Text>(inputText, sf::Color::White, 12);
 
-        textQueue.push_back(text);
+        textQueue.push_back(std::move(text));
     }
 
     void TextPusher::update()
@@ -218,13 +218,14 @@ namespace pi
                (textShown[readIndex-1]->isTextPrinted() and
                 readIndex < textQueue.size()))
             {
-                pushAllTexts();
+                moveAllTexts();
                 enforceLineLimit();
 
                 textQueue[readIndex]->setPosition(origin.x, origin.y);
-                textShown.push_back(textQueue[readIndex]);
+                textShown.push_back(std::move(textQueue[readIndex]));
 
                 framesActive = 0;
+                
                 readIndex++;
             }
 
@@ -233,9 +234,9 @@ namespace pi
         }
     }
 
-    void TextPusher::pushAllTexts()
+    void TextPusher::moveAllTexts()
     {
-        for(auto text : textShown)
+        for(auto&& text : textShown)
         {
             text->move(0, -14);
         }
@@ -248,6 +249,10 @@ namespace pi
         if(textShown.size() > lineLimit - 1)
         {
             textShown[textShown.size() - lineLimit]->setText(" ");
+
+            textShown.erase(textShown.begin());
+            textQueue.erase(textQueue.begin());
+            readIndex--;
         }
     }
 
@@ -263,18 +268,13 @@ namespace pi
 
     void TextPusher::clear()
     {
-        for (std::vector<pi::Text*>::iterator it = textShown.begin() ; it != textShown.end(); ++it)
-        {
-            delete(*it);
-        } 
-
         textShown.clear();
         textQueue.clear();
 
         readIndex = 0;
     }
 
-    std::vector<pi::Text*> TextPusher::getTexts()
+    std::vector<std::unique_ptr<pi::Text>>& TextPusher::getTexts()
     {
         return textShown;
     }

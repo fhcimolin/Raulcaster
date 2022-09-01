@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
+#include <memory>
 
 constexpr static auto SCREEN_WIDTH = 640;
 constexpr static auto SCREEN_HEIGHT = 480;
@@ -83,12 +84,12 @@ namespace pi
         int readIndex;
         int framesActive;
         
-        std::vector<pi::Text*> textQueue;
-        std::vector<pi::Text*> textShown;
+        std::vector<std::unique_ptr<pi::Text>> textQueue;
+        std::vector<std::unique_ptr<pi::Text>> textShown;
 
         Point origin;
         
-        void pushAllTexts();
+        void moveAllTexts();
         void enforceLineLimit();
         void clearAfterTimeLimit();
         void clear();
@@ -100,7 +101,7 @@ namespace pi
         void sendText(std::string inputText);
         void update();
 
-        std::vector<pi::Text*> getTexts();
+        std::vector<std::unique_ptr<pi::Text>>& getTexts();
     };
 
     class Texture
