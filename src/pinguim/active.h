@@ -26,7 +26,11 @@ namespace pi
         int x;
         int y;
 
+        static constexpr auto TILE_SIZE = 64;
+
         sf::Sprite sprite;
+        sf::Image image;
+        std::vector<unsigned int> activeImage;
 
         std::vector<animation> animationReel;
     public:
@@ -36,9 +40,17 @@ namespace pi
         void setPosition(int, int);
         void setTexture(sf::Texture*);
         void update();
+        
+        
+        
+        
+        void setImage(sf::Image);
+
+        std::vector<unsigned int> getActiveImage();
+
+        const sf::Texture* setTexture();
 
         sf::Sprite getSprite();
-        sf::Image getImage();
 
         const sf::Texture* getTexture();
     };

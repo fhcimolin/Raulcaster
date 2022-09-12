@@ -59,7 +59,7 @@ Game::Game():
 
     textures.push_back(tex::TextureLoader::getTexture("char.png"));
 
-    active.setTexture(&textures[0]);
+    active.setImage(tex::TextureLoader::getImage("char.png"));
 
     loadTextures();
 }
@@ -150,18 +150,12 @@ void loadTextures()
     texture[5] = tex::TextureLoader::getImageAsVectorStripe(imageBackground);
     texture[6] = tex::TextureLoader::getImageAsVectorStripe(imageGrassTrail);
     
-    texture[9] = tex::TextureLoader::getImageAsVectorStripe(imageTree);
+    // texture[9] = tex::TextureLoader::getImageAsVectorStripe(imageTree);
 }
     
 void updateActiveTextures(pi::Active& active)
 {
-    // auto imageTree = active.getSprite();
-
-    auto imageTree = active.getTexture()->copyToImage();
-
-    
-
-    texture[9] = tex::TextureLoader::getImageAsVectorStripe(imageTree);
+    texture[9] = active.getActiveImage();
 }
 
 /**

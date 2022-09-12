@@ -27,6 +27,13 @@ namespace pi
         maxFrame = animationReel[currentReel].reelLenght;
     }
 
+    void Active::setTexture(sf::Texture* texture)
+    {
+        sprite.setTexture(*texture);
+
+        updateTextureCell();
+    }
+
     void Active::setPosition(int _x, int _y)
     {
         x = _x;
@@ -35,12 +42,42 @@ namespace pi
         sprite.setPosition(_x, _y);
     }
 
-    void Active::setTexture(sf::Texture* texture)
+    void Active::setImage(sf::Image _image)
     {
-        sprite.setTexture(*texture);
+        // sprite.setTexture(*texture);
 
-        updateTextureCell();
+        image = _image;
+
+        // updateTextureCell();
     }
+
+    std::vector<unsigned int> Active::getActiveImage()
+    {
+        auto pixelsPtr = image.getPixelsPtr();
+
+        auto readOffset = ((currentReel * image.getSize().x) + currentFrame) * 4;
+
+        activeImage.clear();
+
+        for(int vertical = 0; vertical < TILE_SIZE; vertical++)
+        {
+            for(int horizontal = 0; horizontal < TILE_SIZE; horizontal++)
+            {
+                auto r = pixelsPtr[readOffset + ((vertical * image.getSize().x) + horizontal * 4)];
+                auto g = pixelsPtr[readOffset + ((vertical * image.getSize().x) + horizontal * 4) + 1];
+                auto b = pixelsPtr[readOffset + ((vertical * image.getSize().x) + horizontal * 4) + 2];
+
+                activeImage.push_back
+                (
+                    (r << 16) + (g << 8) + b
+                );
+            }
+        }
+
+        return activeImage;
+    }
+
+
 
     void Active::updateTextureCell()
     {
