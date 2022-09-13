@@ -63,9 +63,9 @@ namespace pi
         {
             for(int horizontal = 0; horizontal < TILE_SIZE; horizontal++)
             {
-                auto r = pixelsPtr[readOffset + ((vertical * image.getSize().x) + horizontal * 4)];
-                auto g = pixelsPtr[readOffset + ((vertical * image.getSize().x) + horizontal * 4) + 1];
-                auto b = pixelsPtr[readOffset + ((vertical * image.getSize().x) + horizontal * 4) + 2];
+                auto r = pixelsPtr[readOffset + ((((vertical * image.getSize().x) + horizontal) * 4))];
+                auto g = pixelsPtr[readOffset + ((((vertical * image.getSize().x) + horizontal) * 4)) + 1];
+                auto b = pixelsPtr[readOffset + ((((vertical * image.getSize().x) + horizontal) * 4)) + 2];
 
                 activeImage.push_back
                 (
