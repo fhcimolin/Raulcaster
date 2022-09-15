@@ -55,7 +55,7 @@ namespace pi
     {
         auto pixelsPtr = image.getPixelsPtr();
 
-        auto readOffset = ((currentReel * image.getSize().x) + currentFrame) * 4;
+        auto readOffset = (((currentReel * TILE_SIZE) * image.getSize().x) + (currentFrame * TILE_SIZE)) * 4;
 
         activeImage.clear();
 

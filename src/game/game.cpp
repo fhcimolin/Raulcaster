@@ -61,6 +61,8 @@ Game::Game():
 
     active.setImage(tex::TextureLoader::getImage("char.png"));
 
+    active.changeAnimationReel(1);
+
     loadTextures();
 }
 
@@ -92,6 +94,7 @@ void Game::update(GameWindow& game)
     }
 
     textPusher.update();
+
     active.update();
 
     updateActiveTextures(active);

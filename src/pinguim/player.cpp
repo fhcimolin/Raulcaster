@@ -23,12 +23,12 @@ void Player::readKey()
 
 void Player::stop()
 {
-    changeAnimationReel(0);
+    // changeAnimationReel(0);
 }
 
 void Player::run()
 {
-    changeAnimationReel(1);
+    // changeAnimationReel(1);
 }
 
 void Player::move(v::direction direction)
