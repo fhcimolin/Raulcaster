@@ -8,6 +8,12 @@ class Game: public Page
 {
 private:
     void handleKeys();
+    void viewRender();
+
+    std::vector<int> spriteOrder;
+    std::vector<double> spriteDistance;
+
+    std::vector<std::unique_ptr<Player>> sprites;
 
     std::vector<sf::Texture> textures;
 

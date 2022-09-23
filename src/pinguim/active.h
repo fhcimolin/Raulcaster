@@ -21,10 +21,7 @@ namespace pi
         int currentFrame;
         int maxFrame;
     protected:
-        int currentReel;
-        
-        int x;
-        int y;
+        int currentReel;       
 
         static constexpr auto TILE_SIZE = 64;
 
@@ -41,8 +38,8 @@ namespace pi
         void setTexture(sf::Texture*);
         void update();
         
-        
-        
+        int x;
+        int y;
         
         void setImage(sf::Image);
 

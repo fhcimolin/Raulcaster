@@ -39,7 +39,7 @@ void movePlayer(std::map<sf::Keyboard::Key, bool>);
 
 void drawBuffer(sf::RenderWindow&);
 
-void meuTenis();
+void viewRender();
 
 void loadTextures();
 
@@ -48,7 +48,7 @@ void updateActiveTextures(pi::Active&);
 Game::Game():
     textures{},
     textPusher{},
-    active{Player()}
+    sprites{}
 {
     textPusher.sendText("lorem ipsum dolor sit amet");
     textPusher.sendText("adipiscing elit consectetur");
@@ -59,9 +59,28 @@ Game::Game():
 
     textures.push_back(tex::TextureLoader::getTexture("char.png"));
 
-    active.setImage(tex::TextureLoader::getImage("char.png"));
 
-    active.changeAnimationReel(1);
+    auto activeImage = tex::TextureLoader::getImage("char.png");
+
+    for(auto i = 0; i < 5; i++)
+    {
+        auto _active = std::make_unique<Player>();
+
+        _active->setImage(activeImage);
+    
+        _active->setPosition(18 + i, 4);
+
+        _active->changeAnimationReel(1);
+
+        sprites.push_back(std::move(_active));
+    }
+
+    // TROCAR SPRITES DO RAYCASTER PELO VECTOR DE SPRITES DA CLASSE
+
+
+    // arrays used to sort the sprites
+    // auto spriteOrder = std::vector<int, sprites.size()>{};
+    // auto spriteDistance = std::vector<double, sprites.size()>{};
 
     loadTextures();
 }
@@ -97,11 +116,11 @@ void Game::update(GameWindow& game)
 
     active.update();
 
-    updateActiveTextures(active);
+    // updateActiveTextures(active);
 
     handleKeys();
     movePlayer(keys);
-    meuTenis();
+    viewRender();
 }
 
 void Game::handleKeys()
@@ -158,7 +177,7 @@ void loadTextures()
     
 void updateActiveTextures(pi::Active& active)
 {
-    texture[9] = active.getActiveImage();
+    // texture[9] = active.getActiveImage();
 }
 
 /**
@@ -432,47 +451,43 @@ struct Sprite
     int texture;
 };
 
-auto sprites = std::array<Sprite, 50>
-{
-    Sprite
-    // {20.5, 11.5, 10}, // green light in front of playerstart
-    // green lights in every room
-    {18.5 , 4.5  , 9},
-    {10.0 , 4.5  , 9},
-    {10.0 , 12.5 , 9},
-    {3.5  , 6.5  , 9},
-    {3.5  , 20.5 , 9},
-    {3.5  , 14.5 , 9},
-    {14.5 , 20.5 , 9},
+// auto sprites = std::array<Sprite, 50>
+// {
+//     Sprite
+//     // {20.5, 11.5, 10}, // green light in front of playerstart
+//     // green lights in every room
+//     {18.5 , 4.5  , 9},
+//     {10.0 , 4.5  , 9},
+//     {10.0 , 12.5 , 9},
+//     {3.5  , 6.5  , 9},
+//     {3.5  , 20.5 , 9},
+//     {3.5  , 14.5 , 9},
+//     {14.5 , 20.5 , 9},
 
-    // row of pillars in front of wall: fisheye test
-    {18.5 , 10.5 , 9},
-    {18.2 , 11   , 9},
-    {18   , 11.2 , 9},
-    {20.2 , 1.5  , 9},
-    {01.2 , 10.5 , 9},
-    {10.2 , 17.2 , 9},
-    { 22  , 21   , 9},
+//     // row of pillars in front of wall: fisheye test
+//     {18.5 , 10.5 , 9},
+//     {18.2 , 11   , 9},
+//     {18   , 11.2 , 9},
+//     {20.2 , 1.5  , 9},
+//     {01.2 , 10.5 , 9},
+//     {10.2 , 17.2 , 9},
+//     { 22  , 21   , 9},
 
-    // some barrels around the map
-    {21.5 , 1.5  , 9},
-    {15.5 , 1.5  , 9},
-    {16.0 , 1.8  , 9},
-    {16.2 , 1.2  , 9},
-    {3.5  , 2.5  , 9},
-    {9.5  , 15.5 , 9},
-    {10.0 , 15.1 , 9},
-    {10.5 , 15.8 , 9},
-};
+//     // some barrels around the map
+//     {21.5 , 1.5  , 9},
+//     {15.5 , 1.5  , 9},
+//     {16.0 , 1.8  , 9},
+//     {16.2 , 1.2  , 9},
+//     {3.5  , 2.5  , 9},
+//     {9.5  , 15.5 , 9},
+//     {10.0 , 15.1 , 9},
+//     {10.5 , 15.8 , 9},
+// };
 
 auto buffer = std::array<std::array<unsigned int, SCREEN_WIDTH>, SCREEN_HEIGHT>{};
 
 // 1D Zbuffer
 auto zbuffer = std::array<double, SCREEN_WIDTH>{};
-
-// arrays used to sort the sprites
-auto spriteOrder = std::array<int, sprites.size()>{};
-auto spriteDistance = std::array<double, sprites.size()>{};
 
 // function used to sort the sprites
 void combSort(int* order, double* dist, int amount);
@@ -609,7 +624,7 @@ void drawBuffer(sf::RenderWindow& window)
     }
 }
 
-void meuTenis() {
+void Game::viewRender() {
     
     drawBackground(texture[5], offset);
 
@@ -1099,23 +1114,24 @@ void meuTenis() {
 
             // sqrt not taken, unneeded
             spriteDistance[i] = (
-                    (posX - sprites[i].x) * (posX - sprites[i].x) +
-                    (posY - sprites[i].y) * (posY - sprites[i].y)
-                    );
+                (posX - sprites[i]->x) * (posX - sprites[i]->x) +
+                (posY - sprites[i]->y) * (posY - sprites[i]->y)
+            );
         }
+
+        return;
         
         combSort(spriteOrder.data(), spriteDistance.data(), sprites.size());
 
         // after sorting the sprites, do the projection and draw them
         for (auto i = 0u; i < sprites.size(); i++) 
         {
-            auto _sprite = sprites[spriteOrder[i]];
-
-            auto obj = Point{_sprite.x, _sprite.y};
+            auto _x = sprites[spriteOrder[i]]->x;
+            auto _y = sprites[spriteOrder[i]]->y;
 
             // translate sprite position to relative to camera
-            auto spriteX = obj.x - posX;
-            auto spriteY = obj.y - posY;
+            auto spriteX = _x - posX;
+            auto spriteY = _y - posY;
 
             // transform sprite with the inverse camera matrix
             // [ planeX   dirX ] -1                                       [ dirY      -dirX ]
@@ -1194,13 +1210,19 @@ void meuTenis() {
                         auto d = (y-vMoveScreen) * 256 - h * 128 + spriteHeight * 128;
                         auto texY = ((d * TEX_HEIGHT) / spriteHeight) >> 8;
 
+                        
                         // get current color from the texture
-                        auto color = texture[sprites[spriteOrder[i]].texture][TEX_WIDTH * texY + texX];
+                        // auto color = texture[sprites[spriteOrder[i]].texture][TEX_WIDTH * texY + texX];
+
+                        // auto color = sprites[spriteOrder[i]]->getActiveImage()[TEX_WIDTH * texY + texX];
+
+
+
                         // paint pixel if it isn't black, black is the invisible color
-                        if ((color & 0x00FFFFFF) != 0) 
-                        {
-                            buffer[y][stripe] = colorWithFog(color, spriteDistance[i] / 12);
-                        }
+                        // if ((color & 0x00FFFFFF) != 0) 
+                        // {
+                        //     buffer[y][stripe] = colorWithFog(color, spriteDistance[i] / 12);
+                        // }
                     }
                 }
             }
